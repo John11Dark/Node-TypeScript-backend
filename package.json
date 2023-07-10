@@ -1,0 +1,25 @@
+{
+  "name": "node-typescript-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon"
+  },
+  "keywords": [],
+  "author": "John Muller",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@types/node": "^20.4.1",
+    "node": "^20.4.0",
+    "ts-node": "^10.9.1"
+  }
+}

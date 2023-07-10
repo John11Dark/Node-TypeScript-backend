@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "Node",
+    "module": "NodeNext",
+    "outDir": "dist",
+    "baseUrl": "src",
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true
+  },
+  "include": ["src/**/*"],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
+}
