@@ -131,4 +131,5 @@ dist
 .pnp.*
 
 src/config
+config
 src/bin
