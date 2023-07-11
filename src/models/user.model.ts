@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import config from "config";
 //
-import { IUser } from "../interfaces";
+import { IUser } from "../interfaces/user.interface";
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -79,6 +79,6 @@ userSchema.methods.comparePassword = async function (
   return await bcrypt.compare(password, this.password).catch((_) => false);
 };
 
-const User = mongoose.model<IUser>("User", userSchema);
+const UserModal = mongoose.model<IUser>("User", userSchema);
 
-export default User;
+export default UserModal;

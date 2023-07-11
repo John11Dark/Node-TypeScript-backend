@@ -1,5 +1,17 @@
+import { IUser } from "../interfaces/user.interface";
 import { User } from "../models";
-
+import { DocumentDefinition } from "mongoose";
+// DocumentDefinition<
+// Omit<
+// IUser,
+// | "createdAt"
+// | "updatedAt"
+// | "comparePassword"
+// | "isDeleted"
+// | "isVerified"
+// | "image"
+// >
+// >
 export default class UserService {
   public async createUser(input: any) {
     try {
