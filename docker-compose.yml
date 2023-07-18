@@ -10,22 +10,5 @@ version : '3.7'
       - NODE_ENV=production
     build:
       context: ./
-  
-  caddy:
-    image: caddy:2.4.5-alpine
-    container-name: caddy
-    restart: unless-stopped
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./data/caddy:/data
-      - ./data/cert:/certs
-    depends_on:
-      - backend-ts-app
 
-volumes:
-  data:
-  cert:
 #  docker-compose up -d
