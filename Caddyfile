@@ -1,0 +1,5 @@
+backend-ts-app.snipd.io {
+    reverse_proxy backend-ts-app:9000 {
+        header_down Strict-Transport-Security max-age=31536000;
+    }
+}

@@ -1,0 +1,31 @@
+version : '3.7'
+ * @date : 2023/7/15 10:46 
+ */
+
+ services: 
+  backend-ts-app:
+    container-name: backend-ts-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    build:
+      context: ./
+  
+  caddy:
+    image: caddy:2.4.5-alpine
+    container-name: caddy
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./data/caddy:/data
+      - ./data/cert:/certs
+    depends_on:
+      - backend-ts-app
+
+volumes:
+  data:
+  cert:
+#  docker-compose up -d
