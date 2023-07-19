@@ -7,10 +7,17 @@ export default async function connect() {
 
   try {
     await mongoose.connect(db);
-    if (process.env.NODE_ENV === "development")
-      logger.info(`Connected to ${db}...`);
+    if (
+      process.env.NODE_ENV === "development" ||
+      process.env.NODE_ENV == undefined
+    )
+      logger.info(`Connected to database ${db}...`);
   } catch (error) {
-    if (process.env.NODE_ENV === "development") logger.error(error);
+    if (
+      process.env.NODE_ENV === "development" ||
+      process.env.NODE_ENV == undefined
+    )
+      logger.error(error);
     process.exit(1);
   }
 }

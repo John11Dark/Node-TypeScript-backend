@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 import { ISession } from "../interfaces/session.interface";
-import UserFingerPrint from "../types/userFingerPrintType";
+// import UserFingerPrint from "../types/userFingerPrintType";
 const sessionSchema = new mongoose.Schema(
   {
     user: {
@@ -14,7 +14,7 @@ const sessionSchema = new mongoose.Schema(
       default: true,
     },
     userAgent: {
-      type: [UserFingerPrint],
+      type: Array,
     },
   },
 

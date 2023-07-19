@@ -6,7 +6,7 @@ import compression from "compression";
 
 // ? * -->
 import { connect, logger } from "./src/utilities";
-import routes from "./src/routes";
+import routes from "./src/routes/routes";
 import { deserializeUser } from "./src/middleware";
 
 const port = process.env.PORT || config.get<number>("port");
@@ -22,10 +22,12 @@ app.use(compression());
 
 app.use(deserializeUser);
 app.listen(port, async () => {
-  if (process.env.NODE_ENV === "development")
-    logger.info(`Server has started on  ${ipAddress}:${port}...`);
   await connect();
   routes(app);
-  console.log("Server has started on port 3000...");
+
+  if (
+    process.env.NODE_ENV === "development" ||
+    process.env.NODE_ENV === undefined
+  )
+    logger.info(`Server has started on  https://${ipAddress}:${port}...`);
 });
-console.log(app);
