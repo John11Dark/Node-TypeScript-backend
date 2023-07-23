@@ -4,9 +4,14 @@ import config from "config";
 import logger from "./logger";
 export default async function connect() {
   const db = config.get<string>("dbURL");
+  const dbConfig = {
+    useNewUrlParser: true,
+    autoIndex: true,
+    useUnifiedTopology: true,
+  };
 
   try {
-    await mongoose.connect(db);
+    await mongoose.connect(db, dbConfig);
     if (
       process.env.NODE_ENV === "development" ||
       process.env.NODE_ENV == undefined

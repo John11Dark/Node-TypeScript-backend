@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface IUserInput {
+export interface IUserInput {
   name: string;
   email: string;
   username: string;
@@ -13,12 +13,10 @@ interface IUserInput {
   image: Array<string>;
 }
 
-interface IUser extends IUserInput, mongoose.Document {
+export interface IUser extends IUserInput, mongoose.Document {
   isDeleted: boolean;
   password: string;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(password: string): Promise<Boolean>;
 }
-
-export type { IUser, IUserInput };

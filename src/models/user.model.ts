@@ -1,8 +1,11 @@
+// ? * --> Third parties helpers
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import config from "config";
-//
+
+// ? * --> custom helpers
 import { IUser } from "../interfaces/user.interface";
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -54,11 +57,11 @@ const userSchema = new mongoose.Schema(
       minLength: 2,
       maxLength: 5,
     },
-    gender: Boolean,
     dateOfBirth: {
       type: Date,
       required: true,
     },
+    gender: Boolean,
     image: Array,
   },
   { timestamps: true }
@@ -79,6 +82,4 @@ userSchema.methods.comparePassword = async function (
   return await bcrypt.compare(password, this.password).catch((_) => false);
 };
 
-const UserModal = mongoose.model<IUser>("User", userSchema);
-
-export default UserModal;
+export default mongoose.model<IUser>("User", userSchema);

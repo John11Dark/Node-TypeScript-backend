@@ -2,7 +2,7 @@
 
 ### GET /users
 
-GET http://10.10.10.151:9000/api/users
+GET http://10.10.10.151:9000/
 
 
 ### GET /users/{id}
