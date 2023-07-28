@@ -12,7 +12,7 @@ const accessTokenTtl =
 const refreshTokenTtL =
   process.env.refreshTokenTtl || config.get<string>("refreshTokenTtl");
 
-async function generateToken(user: IUser) {
+async function generateToken(user: IUser, sessionId: string) {
   const newUser = {
     id: user._id,
     email: user.email,
@@ -22,6 +22,7 @@ async function generateToken(user: IUser) {
     isVerified: user.isVerified,
     dob: user.dateOfBirth,
     gender: user.gender,
+    sessionId,
   };
   try {
     const token = Jwt.sign(newUser, PRIVATE_KEY, { expiresIn: accessTokenTtl });
@@ -31,7 +32,7 @@ async function generateToken(user: IUser) {
   }
 }
 
-async function generateRefreshToken(user: IUser) {
+async function generateRefreshToken(user: IUser, sessionId: string) {
   const newUser = {
     id: user._id,
     email: user.email,
@@ -41,6 +42,7 @@ async function generateRefreshToken(user: IUser) {
     isVerified: user.isVerified,
     dob: user.dateOfBirth,
     gender: user.gender,
+    sessionId,
   };
   try {
     const token = Jwt.sign(newUser, REFRESH_KEY, {
@@ -52,12 +54,20 @@ async function generateRefreshToken(user: IUser) {
   }
 }
 
-async function verifyToken(token: string): Promise<IUser> {
+async function verifyToken(token: string) {
   try {
-    const user = Jwt.verify(token, PRIVATE_KEY);
-    return user as IUser;
+    const decoded = Jwt.verify(token, PRIVATE_KEY) as any;
+    return {
+      expired: false,
+      decoded,
+      sessionId: decoded.sessionId,
+    };
   } catch (error: any) {
-    throw new Error(error);
+    return {
+      expired: true,
+      decoded: null,
+      sessionId: null,
+    };
   }
 }
 

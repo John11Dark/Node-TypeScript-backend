@@ -1,11 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { AnyZodObject } from "zod";
+import { logger } from "../utilities";
 
 const validate =
   (
     schema: AnyZodObject | any // Todo: Fix any
   ) =>
   (req: Request, res: Response, next: NextFunction) => {
+    logger.info("Validating request");
+    logger.info(req.body);
     try {
       schema.parse({
         body: req.body,

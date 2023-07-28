@@ -1,11 +1,11 @@
 import { Response, Request } from "express";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { Token } from "../utilities";
 import { UserService, SessionService } from "../service/index";
 import { CreateUserSchemaType } from "../schema/user.schema";
+import { logger } from "../utilities";
 
-export async function createUserHandler(
+async function authenticateUserHandler(
   req: Request<{}, {}, CreateUserSchemaType["body"]>,
   res: Response
 ) {
@@ -25,18 +25,28 @@ export async function createUserHandler(
       user._id,
       req.headers["user-agent"] || ""
     );
-    const accessToken = await jwt.sign(
-      { session },
-      process.env.JWT_SECRET || ""
-    );
-    const refreshToken = await Token.generateRefreshToken(user);
+    const accessToken = await Token.generateToken(user, session._id);
+    const refreshToken = await Token.generateRefreshToken(user, session._id);
     return res.status(200).send({ accessToken, refreshToken });
   } catch (error: any) {
     throw new Error(error);
   }
 }
 
-export async function getUserSessionsHandler(req: Request, res: Response) {
+export async function registerUserHandler(
+  req: Request<{}, {}, CreateUserSchemaType["body"]>,
+  res: Response
+) {
+  try {
+    const user = await UserService.createUser(req.body); // TODO: Fix type error
+    return res.status(200).send(user);
+  } catch (error) {
+    logger.error(error);
+    return res.status(409).send(error);
+  }
+}
+
+async function getUserSessionsHandler(req: Request, res: Response) {
   const userId = res.locals.user._id;
 
   const sessions = await SessionService.find(userId);
@@ -44,7 +54,7 @@ export async function getUserSessionsHandler(req: Request, res: Response) {
   return res.send(sessions);
 }
 
-export async function deleteSessionHandler(req: Request, res: Response) {
+async function deleteSessionHandler(req: Request, res: Response) {
   const sessionId = res.locals.user.session;
 
   await SessionService.update({ _id: sessionId }, { valid: false });
@@ -54,3 +64,10 @@ export async function deleteSessionHandler(req: Request, res: Response) {
     refreshToken: null,
   });
 }
+
+export default {
+  authenticateUserHandler,
+  registerUserHandler,
+  getUserSessionsHandler,
+  deleteSessionHandler,
+};

@@ -1,9 +1,9 @@
-import { User } from "../models";
+import { UserModel } from "../models";
 import { IUserInput } from "../interfaces/user.interface";
 
 async function createUser(input: IUserInput) {
   try {
-    const user = await User.create(input);
+    const user = await UserModel.create(input);
     return user;
   } catch (error: any) {
     throw new Error(error);
@@ -12,7 +12,7 @@ async function createUser(input: IUserInput) {
 
 async function getUserById(id: string) {
   try {
-    const user = await User.findById(id);
+    const user = await UserModel.findById(id);
     return user;
   } catch (error: any) {
     throw new Error(error);
@@ -21,7 +21,7 @@ async function getUserById(id: string) {
 
 async function getUserByEmail(email: string) {
   try {
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
     return user;
   } catch (error: any) {
     throw new Error(error);
@@ -30,7 +30,7 @@ async function getUserByEmail(email: string) {
 
 async function getUserByUsername(username: string) {
   try {
-    const user = await User.findOne({ username });
+    const user = await UserModel.findOne({ username });
     return user;
   } catch (error: any) {
     throw new Error(error);
@@ -39,7 +39,7 @@ async function getUserByUsername(username: string) {
 
 async function getUserByPhoneNumber(phoneNumber: string) {
   try {
-    const user = await User.findOne({ phoneNumber });
+    const user = await UserModel.findOne({ phoneNumber });
     return user;
   } catch (error: any) {
     throw new Error(error);
@@ -48,7 +48,7 @@ async function getUserByPhoneNumber(phoneNumber: string) {
 
 async function updateUserById(id: string, input: any) {
   try {
-    const user = await User.findByIdAndUpdate(id, input, { new: true });
+    const user = await UserModel.findByIdAndUpdate(id, input, { new: true });
     return user;
   } catch (error: any) {
     throw new Error(error);
@@ -57,16 +57,16 @@ async function updateUserById(id: string, input: any) {
 
 async function deleteUserById(id: string) {
   try {
-    const user = await User.findByIdAndDelete(id);
+    const user = await UserModel.findByIdAndDelete(id);
     return user;
   } catch (error: any) {
     throw new Error(error);
   }
 }
 
-async function validateUserPassword(email: string, password: string) {
+async function validatePassword(email: string, password: string) {
   try {
-    const user = await User.findOne({ email });
+    const user = await UserModel.findOne({ email });
 
     if (!user) return false;
 
@@ -86,5 +86,5 @@ export default {
   getUserByPhoneNumber,
   updateUserById,
   deleteUserById,
-  validateUserPassword,
+  validateUserPassword: validatePassword,
 };

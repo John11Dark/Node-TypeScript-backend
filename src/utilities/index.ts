@@ -1,3 +1,3 @@
-export { default as connect } from "./connect";
-export { default as logger } from "./logger";
+export { default as connect } from "./connect.utils";
+export { default as logger } from "./logger.utils";
 export { default as Token } from "./jwt.utils";

@@ -1,12 +1,19 @@
 import { Express, Request, Response } from "express";
-import users from "./users.routes";
-import { createUserHandler } from "../controller/user.controller";
-import validate from "../middleware/validateResource";
-import { createUserSchema } from "../schema/user.schema";
+import { AuthController, UserController } from "../controller";
+import { Validate, Authenticate } from "../middleware";
+import { AuthSchema, UserSchema } from "../schema/";
+import userSchema from "../schema/user.schema";
 
 const PATHS = Object.freeze({
   USERS: "/api/users",
-  USERS_id: "/api/users/:id",
+  USER_id: "/api/users/:id",
+  USER_Query: "/api/users/:query",
+  AUTH_REGISTER: "/auth/register",
+  AUTH: "/auth/login",
+  Auth_UPDATE: "/auth/update:id",
+  Auth_DELETE: "/auth/delete:id",
+  LOGOUT: "/auth/Logout",
+  SESSIONS: "/api/sessions",
 });
 
 export default function routes(app: Express) {
@@ -15,18 +22,35 @@ export default function routes(app: Express) {
     res.status(200).send("Server is up and running");
   });
 
-  // ? This is the users route
-  app.get(PATHS.USERS, (req: Request, res: Response) => {
-    res.status(200).send("users");
-  });
+  // ? Auth routes
+  app.post(
+    PATHS.AUTH_REGISTER,
+    Validate(UserSchema.createUserSchema),
+    AuthController.registerUserHandler
+  );
+  app.post(
+    PATHS.AUTH,
+    Validate(AuthSchema.login),
+    AuthController.authenticateUserHandler
+  );
+  app.get(PATHS.SESSIONS, Authenticate, AuthController.getUserSessionsHandler);
 
-  app.post(PATHS.USERS, validate(createUserSchema), createUserHandler);
+  app.delete(PATHS.LOGOUT, Authenticate, AuthController.deleteSessionHandler);
+  // ? User routes
+  app.put(
+    PATHS.Auth_UPDATE,
+    Validate(userSchema.updateUser),
+    Authenticate,
+    UserController.updateUserHandler
+  );
+  app.delete(
+    PATHS.Auth_DELETE,
+    Validate(userSchema.deleteUser),
+    Authenticate,
+    UserController.deleteUserHandler
+  );
 
-  app.put(PATHS.USERS_id, (req: Request, res: Response) => {
-    res.status(201).send("users");
-  });
-
-  app.delete(PATHS.USERS_id, (req: Request, res: Response) => {
-    res.status(201).send("users");
-  });
+  app.get(PATHS.USERS, Authenticate, UserController.getAllUsersHandler);
+  app.get(PATHS.USER_id, Authenticate, UserController.getUserByIdHandler);
+  app.get(PATHS.USER_Query, Authenticate, UserController.getUserByQueryHandler);
 }

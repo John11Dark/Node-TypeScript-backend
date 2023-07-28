@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import config from "config";
 // ? * -->
-import logger from "./logger";
+import logger from "./logger.utils";
 export default async function connect() {
   const db = config.get<string>("dbURL");
   const dbConfig = {

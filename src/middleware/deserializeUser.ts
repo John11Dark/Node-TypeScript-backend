@@ -8,42 +8,46 @@ const deserializeUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  const accessToken = get(req, "headers.authorization", "").replace(
+  const accessToken = get(req.headers, "authorization", "").replace(
     /^Bearer\s/,
     ""
   );
-
-  const refreshToken = get(req, "headers.x-refresh");
+  const refreshToken = get(req.headers, "refresh-token", "")[0];
 
   if (!accessToken) {
     return next();
   }
 
-  const user = Token.verifyToken(accessToken);
+  try {
+    const { decoded, expired } = await Token.verifyToken(accessToken);
 
-  if (user) {
-    res.locals.user = user;
-    return next();
-  }
-
-  if (user && refreshToken) {
-    let newAccessToken;
-    if (typeof refreshToken === "string")
-      newAccessToken = await SessionService.reIssueAccessToken({
-        refreshToken,
-      });
-
-    if (newAccessToken) {
-      res.setHeader("x-access-token", newAccessToken);
+    if (decoded && !expired) {
+      res.locals.user = decoded;
+      return next();
     }
 
-    const result = Token.verifyToken(newAccessToken as string);
+    if (expired && refreshToken) {
+      const newAccessToken = await SessionService.reIssueAccessToken(
+        refreshToken
+      );
 
-    res.locals.user = result;
+      if (!newAccessToken) {
+        return next();
+      }
+
+      res.setHeader("Authorization", `Bearer ${newAccessToken}`);
+
+      const { decoded } = await Token.verifyToken(newAccessToken);
+
+      res.locals.user = decoded;
+      return next();
+    }
+
     return next();
+  } catch (error) {
+    console.error("Error in deserializeUser:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
-
-  return next();
 };
 
 export default deserializeUser;

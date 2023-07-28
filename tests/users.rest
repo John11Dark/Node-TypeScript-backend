@@ -1,8 +1,68 @@
-# get users 
-
-### GET /users
-
 GET http://10.10.10.151:9000/
 
+###
+GET http://10.10.10.151:9000/api/users
 
-### GET /users/{id}
+###
+GET http://10.10.10.151:9000/api/users/email=info@johnmuller.eu
+
+###
+GET http://10.10.10.151:9000/api/users/username=john1_1dark
+
+###
+GET http://10.10.10.151:9000/api/users/phoneNumber=79230096
+
+
+###
+POST http://10.10.10.151:9000/auth/register
+
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test"
+}
+
+###
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "name": "John Muller",
+    "password": "123456789",
+    "username" : "john1_1dark",
+    "email" : "info@johnmuller.eu",
+    "countryCode" : "+356",
+    "phoneNumber" : "79230096",
+    "address" : {
+        "street" : "test",
+        "city" : "test",
+        "country" : "test",
+        "zipCode" : "test"
+    },
+    "role" : "admin",
+    "passwordConfirmation": "1234567890",
+    "gender" : true,
+    "dateOfBirth" : "2001-03-16",
+}
+
+###
+POST http://10.10.10.151:9000/auth/login
+Content-Type: application/json
+
+{
+    "query": {
+        "username": "john1_1dark"
+    },
+    "password": "12345test"
+}
+
+###
+POST http://10.10.10.151:9000/auth/login
+
+Content-Type: application/json
+
+{
+    "email" : "info@johnmuller.eu",
+    "password": "12345test"
+}
