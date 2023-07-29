@@ -22,6 +22,8 @@ async function getUserById(id: string) {
 async function getUserByEmail(email: string) {
   try {
     const user = await UserModel.findOne({ email });
+    console.log(user?.password);
+
     return user;
   } catch (error: any) {
     throw new Error(error);

@@ -1,8 +1,12 @@
 import { Express, Request, Response } from "express";
-import { AuthController, UserController } from "../controller";
+import {
+  AuthController,
+  UserController,
+  ProductController,
+} from "../controller";
 import { Validate, Authenticate } from "../middleware";
-import { AuthSchema, UserSchema } from "../schema/";
-import userSchema from "../schema/user.schema";
+import { AuthSchema, ProductSchema, UserSchema } from "../schema/";
+import productSchema from "../schema/product.schema";
 
 const PATHS = Object.freeze({
   USERS: "/api/users",
@@ -14,6 +18,8 @@ const PATHS = Object.freeze({
   Auth_DELETE: "/auth/delete:id",
   LOGOUT: "/auth/Logout",
   SESSIONS: "/api/sessions",
+  PRODUCTS: "/api/products",
+  PRODUCT_id: "/api/products/:id",
 });
 
 export default function routes(app: Express) {
@@ -30,7 +36,7 @@ export default function routes(app: Express) {
   );
   app.post(
     PATHS.AUTH,
-    Validate(AuthSchema.login),
+    Validate(AuthSchema.LOGIN),
     AuthController.authenticateUserHandler
   );
   app.get(PATHS.SESSIONS, Authenticate, AuthController.getUserSessionsHandler);
@@ -39,18 +45,39 @@ export default function routes(app: Express) {
   // ? User routes
   app.put(
     PATHS.Auth_UPDATE,
-    Validate(userSchema.updateUser),
-    Authenticate,
+    [Validate(UserSchema.updateUser), Authenticate],
     UserController.updateUserHandler
   );
   app.delete(
     PATHS.Auth_DELETE,
-    Validate(userSchema.deleteUser),
-    Authenticate,
+    [Validate(UserSchema.deleteUser), Authenticate],
     UserController.deleteUserHandler
   );
 
   app.get(PATHS.USERS, Authenticate, UserController.getAllUsersHandler);
   app.get(PATHS.USER_id, Authenticate, UserController.getUserByIdHandler);
   app.get(PATHS.USER_Query, Authenticate, UserController.getUserByQueryHandler);
+
+  // ? Product routes
+  app.post(
+    PATHS.PRODUCTS,
+    [Validate(productSchema.createSchema), Authenticate],
+    ProductController.create
+  );
+  app.get(
+    PATHS.PRODUCTS,
+    Validate(ProductSchema.getSchema),
+    ProductController.get
+  );
+  app.get(
+    PATHS.PRODUCT_id,
+    Validate(ProductSchema.getSchema),
+    ProductController.find
+  );
+  app.put(
+    PATHS.PRODUCT_id,
+    [Authenticate, Validate(productSchema.updateSchema)],
+    ProductController.update
+  );
+  app.delete(PATHS.PRODUCT_id, Authenticate, ProductController.remove);
 }

@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
+    password: {
+      type: String,
+      required: true,
+      minlength: 8,
+      maxlength: 256,
+    },
     username: {
       type: String,
       required: true,
@@ -67,17 +73,14 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.pre<IUser>(
-  "save",
-  async function (next: mongoose.HookNextFunction): Promise<void> {
-    if (!this.isModified("password")) return next();
-    const WORK_FACTOR = config.get<number>("USER_SALT_WORK_FACTOR");
-    const SALT = await bcrypt.genSalt(WORK_FACTOR);
-    const HASH = await bcrypt.hash(this.password, SALT);
-    this.password = HASH;
-    next();
-  }
-);
+userSchema.pre<IUser>("save", async function (next): Promise<void> {
+  if (!this.isModified("password")) return next();
+  const WORK_FACTOR = config.get<number>("USER_SALT_WORK_FACTOR");
+  const SALT = await bcrypt.genSalt(WORK_FACTOR);
+  const HASH = await bcrypt.hash(this.password, SALT);
+  this.password = HASH;
+  next();
+});
 
 userSchema.methods.comparePassword = async function (
   candidatePassword: string

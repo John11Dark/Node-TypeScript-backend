@@ -1,4 +1,4 @@
-import { TypeOf, boolean, object, string } from "zod";
+import { TypeOf, boolean, date, object, string } from "zod";
 const createUserSchema = object({
   body: object({
     name: string({
@@ -7,7 +7,7 @@ const createUserSchema = object({
     password: string({
       required_error: "Password is required",
     })
-      .min(6, "Password must be at least 6 characters long")
+      .min(8, "Password must be at least 8 characters long")
       .max(30, "Password must be at most 30 characters long"),
     passwordConfirmation: string({
       required_error: "Password confirmation is required",
@@ -38,13 +38,16 @@ const createUserSchema = object({
     gender: boolean({
       required_error: "Gender must be specified",
     }),
-    dateOfBirth: string({
+    dateOfBirth: date({
       required_error: "Date of birth is required",
     }),
+    image: string({
+      required_error: "Image is required",
+    }),
+  }).refine((data: any) => data.password === data.passwordConfirmation, {
+    message: "Passwords do not match",
+    path: ["passwordConfirmation"],
   }),
-}).refine((data: any) => data.password === data.passwordConfirmation, {
-  message: "Passwords do not match",
-  path: ["passwordConfirmation"],
 });
 
 export type CreateUserSchemaType = Omit<

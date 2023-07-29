@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import { Token } from "../utilities";
 import { UserService, SessionService } from "../service/index";
 import { CreateUserSchemaType } from "../schema/user.schema";
-import { logger } from "../utilities";
 
 async function authenticateUserHandler(
   req: Request<{}, {}, CreateUserSchemaType["body"]>,
@@ -38,11 +37,10 @@ export async function registerUserHandler(
   res: Response
 ) {
   try {
-    const user = await UserService.createUser(req.body); // TODO: Fix type error
+    const user = await UserService.createUser(req.body);
     return res.status(200).send(user);
-  } catch (error) {
-    logger.error(error);
-    return res.status(409).send(error);
+  } catch (error: any) {
+    return res.status(409).send({ error: error.message });
   }
 }
 
