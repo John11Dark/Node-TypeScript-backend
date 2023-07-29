@@ -38,7 +38,7 @@ const createUserSchema = object({
     gender: boolean({
       required_error: "Gender must be specified",
     }),
-    dateOfBirth: date({
+    dateOfBirth: string({
       required_error: "Date of birth is required",
     }),
     image: string({

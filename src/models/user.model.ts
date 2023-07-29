@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema(
       maxLength: 5,
     },
     dateOfBirth: {
-      type: Date,
+      type: String,
       required: true,
     },
     gender: Boolean,

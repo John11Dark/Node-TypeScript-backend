@@ -5,16 +5,20 @@ GET http://10.10.10.151:9000/api/users
 
 ###
 GET http://10.10.10.151:9000/api/users/64c3804601a5b5b6d9ecb27e
-
+headers: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzUzMmQwNTc0MjEyMWJjZDhjMDlhNCIsImVtYWlsIjoiZGFya0Bqb2hubXVsbGVyLmV1IiwidXNlcm5hbWUiOiJqb2huMl8yZGFyayIsInBob25lTnVtYmVyIjoiOTk2NzAyMjAiLCJpbWFnZSI6WyJwcm9wZmlsZS5wbmciXSwiaXNWZXJpZmllZCI6ZmFsc2UsImRvYiI6IjIwMDEtMDMtMTYiLCJnZW5kZXIiOnRydWUsInNlc3Npb25JZCI6IjY0YzUzNDhiMjg1NzgzOTFlZjlkZmFhNiIsImlhdCI6MTY5MDY0NTY0MywiZXhwIjoxNjkwNjQ5MjQzfQ.DJ0x7oiLCbhwkMZDTGhJawl2jxe4gAsMd6zUVe6eSCw
 ###
 GET http://10.10.10.151:9000/api/users/email=info@johnmuller.eu
 
 
 ###
 GET http://10.10.10.151:9000/api/users/username=john1_1dark
-
+headers: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzUzMmQwNTc0MjEyMWJjZDhjMDlhNCIsImVtYWlsIjoiZGFya0Bqb2hubXVsbGVyLmV1IiwidXNlcm5hbWUiOiJqb2huMl8yZGFyayIsInBob25lTnVtYmVyIjoiOTk2NzAyMjAiLCJpbWFnZSI6WyJwcm9wZmlsZS5wbmciXSwiaXNWZXJpZmllZCI6ZmFsc2UsImRvYiI6IjIwMDEtMDMtMTYiLCJnZW5kZXIiOnRydWUsInNlc3Npb25JZCI6IjY0YzUzNDhiMjg1NzgzOTFlZjlkZmFhNiIsImlhdCI6MTY5MDY0NTY0MywiZXhwIjoxNjkwNjQ5MjQzfQ.DJ0x7oiLCbhwkMZDTGhJawl2jxe4gAsMd6zUVe6eSCw
 ###
 GET http://10.10.10.151:9000/api/users/phoneNumber=79230096
+headers: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzUzMmQwNTc0MjEyMWJjZDhjMDlhNCIsImVtYWlsIjoiZGFya0Bqb2hubXVsbGVyLmV1IiwidXNlcm5hbWUiOiJqb2huMl8yZGFyayIsInBob25lTnVtYmVyIjoiOTk2NzAyMjAiLCJpbWFnZSI6WyJwcm9wZmlsZS5wbmciXSwiaXNWZXJpZmllZCI6ZmFsc2UsImRvYiI6IjIwMDEtMDMtMTYiLCJnZW5kZXIiOnRydWUsInNlc3Npb25JZCI6IjY0YzUzNDhiMjg1NzgzOTFlZjlkZmFhNiIsImlhdCI6MTY5MDY0NTY0MywiZXhwIjoxNjkwNjQ5MjQzfQ.DJ0x7oiLCbhwkMZDTGhJawl2jxe4gAsMd6zUVe6eSCw
 
 
 ###
@@ -31,12 +35,12 @@ POST http://10.10.10.151:9000/auth/register
 Content-Type: application/json
 
 {
-    "name": "John Muller",
+    "name": "John M0uller",
     "password": "123456789",
-    "username" : "john1_1dark",
-    "email" : "info@johnmuller.eu",
+    "username" : "joh0n2_a2dark",
+    "email" : "dark@john0mullaer.eu",
     "countryCode" : "+356",
-    "phoneNumber" : "99670225",
+    "phoneNumber" : "19670210",
     "address" : {
         "street" : "test",
         "city" : "test",
@@ -46,7 +50,8 @@ Content-Type: application/json
     "role" : "admin",
     "passwordConfirmation": "123456789",
     "gender" : true,
-    "dateOfBirth" : "2001-03-16"
+    "dateOfBirth" : "2001-03-16",
+    "image" : "propfile.png"
 }
 
 ###
@@ -65,9 +70,8 @@ Content-Type: application/json
 
 {
     
-    "username": "John1_1Dark",
-    "email": "mail@gmail.com",
-    "authType": "username",
+    "email": "info@johnmuller.eu",
+    "authType": "email",
     "password": "123456789"
 }
 

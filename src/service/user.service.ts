@@ -1,10 +1,13 @@
 import { UserModel } from "../models";
 import { IUserInput } from "../interfaces/user.interface";
+import { omit } from "lodash";
 
 async function createUser(input: IUserInput) {
   try {
     const user = await UserModel.create(input);
-    return user;
+    // remove password from return value
+
+    return omit(user.toJSON(), "password");
   } catch (error: any) {
     throw new Error(error);
   }

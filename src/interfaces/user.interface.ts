@@ -8,7 +8,7 @@ export interface IUserInput {
   role: string;
   countryCode: string;
   gender: boolean;
-  dateOfBirth: Date;
+  dateOfBirth: Date | string;
   password: string;
   image: string;
 }
