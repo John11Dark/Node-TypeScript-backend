@@ -9,7 +9,7 @@ async function authenticateUserHandler(
   res: Response
 ) {
   try {
-    const user = await UserService.getUserByEmail(req.body.email);
+    const user = await UserService.find({ email: req.body.email });
     if (!user) {
       return res.status(401).send("Invalid email or password");
     }
@@ -20,12 +20,7 @@ async function authenticateUserHandler(
     if (!passwordMatch) {
       return res.status(401).send("Invalid email or password");
     }
-    const session = await SessionService.create(
-      user._id,
-      req.headers["user-agent"] || ""
-    );
-    const accessToken = await Token.generateToken(user, session._id);
-    const refreshToken = await Token.generateRefreshToken(user, session._id);
+    const { accessToken, refreshToken } = await tokenizeUserHandler(user, req);
     return res.status(200).send({ accessToken, refreshToken });
   } catch (error: any) {
     throw new Error(error);
@@ -37,10 +32,13 @@ export async function registerUserHandler(
   res: Response
 ) {
   try {
-    const user = await UserService.createUser(req.body);
-    return res.status(200).send(user);
+    const user = await UserService.create(req.body);
+    const { accessToken, refreshToken } = await tokenizeUserHandler(user, req);
+    return res.status(200).send({ accessToken, refreshToken });
   } catch (error: any) {
-    return res.status(409).send({ error: error.message });
+    return res
+      .status(error.statusCode)
+      .send({ message: error.message, type: error.type });
   }
 }
 
@@ -63,7 +61,17 @@ async function deleteSessionHandler(req: Request, res: Response) {
   });
 }
 
+async function tokenizeUserHandler(user: any, req: Request) {
+  const session = await SessionService.create(
+    user._id,
+    req.headers["user-agent"] || ""
+  );
+  const accessToken = await Token.generateToken(user, session._id);
+  const refreshToken = await Token.generateRefreshToken(user, session._id);
+  return { accessToken, refreshToken };
+}
 export default {
+  tokenizeUserHandler,
   authenticateUserHandler,
   registerUserHandler,
   getUserSessionsHandler,

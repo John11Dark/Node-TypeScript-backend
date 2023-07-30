@@ -1,0 +1,264 @@
+# Health check Route
+GET http://10.10.10.151:9000/
+
+
+# Register Route
+
+### Rigster existing user with same username
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Dark Engines",
+    "password": "123456789",
+    "username" : "John1_1Dark",
+    "email" : "info@johnmuller.euss",
+    "countryCode" : "+356",
+    "phoneNumber" : "79230000",
+    "address" : {
+        "street" : "test",
+        "city" : "test",
+        "country" : "test",
+        "zipCode" : "test"
+    },
+    "role" : "admin",
+    "passwordConfirmation": "123456789",
+    "gender" : true,
+    "dateOfBirth" : "2001-03-16",
+    "image" : "propfile.png"
+}
+
+### Rigster existing user with same email
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Dark Engines",
+    "password": "123456789",
+    "username" : "John1_1Darks",
+    "email" : "info@johnmuller.eu",
+    "countryCode" : "+356",
+    "phoneNumber" : "79230000",
+    "address" : {
+        "street" : "test",
+        "city" : "test",
+        "country" : "test",
+        "zipCode" : "test"
+    },
+    "role" : "admin",
+    "passwordConfirmation": "123456789",
+    "gender" : true,
+    "dateOfBirth" : "2001-03-16",
+    "image" : "propfile.png"
+}
+
+### Rigster existing user with same phone number
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Dark Engines",
+    "password": "123456789",
+    "username" : "John1_1Darks",
+    "email" : "eu@johnmuller.eu",
+    "countryCode" : "+356",
+    "phoneNumber" : "79230001",
+    "address" : {
+        "street" : "test",
+        "city" : "test",
+        "country" : "test",
+        "zipCode" : "test"
+    },
+    "role" : "admin",
+    "passwordConfirmation": "123456789",
+    "gender" : true,
+    "dateOfBirth" : "2001-03-16",
+    "image" : "propfile.png"
+}
+
+
+### Rigster existing user with same with wrong confirm password
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Dark Engines",
+    "password": "123456789",
+    "username" : "John1_1Dark",
+    "email" : "info@johnmuller.eus",
+    "countryCode" : "+356",
+    "phoneNumber" : "79230000",
+    "address" : {
+        "street" : "test",
+        "city" : "test",
+        "country" : "test",
+        "zipCode" : "test"
+    },
+    "role" : "admin",
+    "passwordConfirmation": "1234567890",
+    "gender" : true,
+    "dateOfBirth" : "2001-03-16",
+    "image" : "propfile.png"
+}
+
+
+### Rigster with a missing field
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "password": "123456789",
+    "username" : "John1_1Dark",
+    "email" : "info@johnmuller.eus",
+    "countryCode" : "+356",
+    "phoneNumber" : "79230000",
+    "address" : {
+        "street" : "test",
+        "city" : "test",
+        "country" : "test",
+        "zipCode" : "test"
+    },
+    "role" : "admin",
+    "passwordConfirmation": "123456789",
+    "gender" : true,
+    "dateOfBirth" : "2001-03-16",
+    "image" : "propfile.png"
+}
+
+### Rigster with  wrong email format
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Dark Engines",
+    "password": "123456789",
+    "username" : "John1_1Dark",
+    "email" : "infojohnmuller.eus",
+    "countryCode" : "+356",
+    "phoneNumber" : "79230000",
+    "address" : {
+        "street" : "test",
+        "city" : "test",
+        "country" : "test",
+        "zipCode" : "test"
+    },
+    "role" : "admin",
+    "passwordConfirmation": "123456789",
+    "gender" : true,
+    "dateOfBirth" : "2001-03-16",
+    "image" : "propfile.png"
+}
+
+
+### Rigster with an extra unrequired filed
+# nothing is going to happen but the extra field will be eleminated
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "names" : "test",
+    "data" : "test",
+    "name":  "user",
+    "name": "Dark Engines",
+    "password": "123456789",
+    "username" : "John1_1Dark",
+    "email" : "mail@johnmuller.eu",
+    "countryCode" : "+356",
+    "phoneNumber" : "79230011",
+    "address" : {
+        "street" : "test",
+        "city" : "test",
+        "country" : "test",
+        "zipCode" : "test"
+    },
+    "role" : "admin",
+    "passwordConfirmation": "123456789",
+    "gender" : true,
+    "dateOfBirth" : "2001-03-16",
+    "image" : "propfile.png"
+}
+
+### Rigster correct user
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "name": "Dark Engines",
+    "password": "123456789",
+    "username" : "John1_1Darkas",
+    "email" : "mail@johnmuller.eua",
+    "countryCode" : "+356",
+    "phoneNumber" : "79230021",
+    "address" : {
+        "street" : "test",
+        "city" : "test",
+        "country" : "test",
+        "zipCode" : "test"
+    },
+    "role" : "admin",
+    "passwordConfirmation": "123456789",
+    "gender" : true,
+    "dateOfBirth" : "2001-03-16",
+    "image" : "propfile.png"
+}
+
+###
+
+GET http://10.10.10.151:9000/api/users/username=john1_1dark
+headers: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzYzYzU0NTk3MDk5NTUyMDJhN2RjNyIsImVtYWlsIjoibWFpbEBqb2hubXVsbGVyLmV1YSIsInVzZXJuYW1lIjoiam9objFfMWRhcmthcyIsInBob25lTnVtYmVyIjoiNzkyMzAwMjEiLCJpbWFnZSI6WyJwcm9wZmlsZS5wbmciXSwiaXNWZXJpZmllZCI6ZmFsc2UsImRvYiI6IjIwMDEtMDMtMTYiLCJnZW5kZXIiOnRydWUsInNlc3Npb25JZCI6IjY0YzYzYzU0NTk3MDk5NTUyMDJhN2RjOSIsImlhdCI6MTY5MDcxMzE3MiwiZXhwIjoxNjkwNzE2NzcyfQ.kkfy2d3rP6BbpNVNpQxKZWnNMEKUEShvyEvgTHd2Jho
+###
+GET http://10.10.10.151:9000/api/users/phoneNumber=79230096
+headers: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzUzMmQwNTc0MjEyMWJjZDhjMDlhNCIsImVtYWlsIjoiZGFya0Bqb2hubXVsbGVyLmV1IiwidXNlcm5hbWUiOiJqb2huMl8yZGFyayIsInBob25lTnVtYmVyIjoiOTk2NzAyMjAiLCJpbWFnZSI6WyJwcm9wZmlsZS5wbmciXSwiaXNWZXJpZmllZCI6ZmFsc2UsImRvYiI6IjIwMDEtMDMtMTYiLCJnZW5kZXIiOnRydWUsInNlc3Npb25JZCI6IjY0YzUzNDhiMjg1NzgzOTFlZjlkZmFhNiIsImlhdCI6MTY5MDY0NTY0MywiZXhwIjoxNjkwNjQ5MjQzfQ.DJ0x7oiLCbhwkMZDTGhJawl2jxe4gAsMd6zUVe6eSCw
+
+
+###
+POST http://10.10.10.151:9000/auth/register
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "test"
+}
+
+
+###
+POST http://10.10.10.151:9000/auth/login
+Content-Type: application/json
+
+{
+    "email": "dark@johnmuller.eu",
+    "authType": "email",
+    "password": "123456789"
+}
+
+###
+POST http://10.10.10.151:9000/auth/login
+Content-Type: application/json
+
+{
+    
+    "email": "info@johnmuller.eu",
+    "authType": "email",
+    "password": "123456789"
+}
+
+###
+POST http://10.10.10.151:9000/auth/login
+Content-Type: application/json
+
+{
+    "query": {
+        "phoneNumber": "99670225"
+    },
+    "password": "123456789"
+}
+###
+POST http://10.10.10.151:9000/auth/login
+Content-Type: application/json
+
+{
+    "email" : "info@johnmuller.eu",
+    "password": "12345test"
+}

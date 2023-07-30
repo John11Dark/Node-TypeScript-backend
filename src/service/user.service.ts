@@ -1,66 +1,131 @@
+import { FilterQuery } from "mongoose";
 import { UserModel } from "../models";
 import { IUserInput } from "../interfaces/user.interface";
 import { omit } from "lodash";
 
-async function createUser(input: IUserInput) {
+async function create(input: IUserInput) {
   try {
+    const { email, username, phoneNumber } = input;
+    const existingUser = await find({
+      $or: [
+        { email: email },
+        { username: username },
+        { phoneNumber: phoneNumber },
+      ],
+    });
+    if (existingUser) {
+      if (existingUser.email === email.toLowerCase()) {
+        throw {
+          message: "User with this email already exists",
+          type: "email",
+          statusCode: 409,
+        };
+      } else if (existingUser.username === username.toLowerCase()) {
+        throw {
+          message: "User with this username already exists",
+          type: "username",
+          statusCode: 409,
+        };
+      } else if (existingUser.phoneNumber === phoneNumber) {
+        throw {
+          message: "User with this phone number already exists",
+          type: "phoneNumber",
+          statusCode: 409,
+        };
+      }
+    }
     const user = await UserModel.create(input);
-    // remove password from return value
-
     return omit(user.toJSON(), "password");
   } catch (error: any) {
-    throw new Error(error);
+    throw {
+      message: error.message,
+      type: error.type ?? "Server error",
+      statusCode: error.statusCode ?? 500,
+    };
   }
 }
 
-async function getUserById(id: string) {
+async function find(query: FilterQuery<IUserInput>) {
   try {
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findOne(query);
+    if (!user)
+      throw {
+        message: "User not found",
+        statusCode: 404,
+        type: "Bad request",
+      };
     return user;
   } catch (error: any) {
-    throw new Error(error);
+    throw {
+      message: error.message,
+      type: error.type ?? "Server error",
+      statusCode: error.statusCode ?? 500,
+    };
   }
 }
 
-async function getUserByEmail(email: string) {
+async function update(id: string, input: any) {
   try {
-    const user = await UserModel.findOne({ email });
-    console.log(user?.password);
+    const user = await find({
+      $or: [
+        { _id: id },
+        { email: input.email },
+        { username: input.username },
+        { phoneNumber: input.phoneNumber },
+      ],
+    });
+    if (!user)
+      throw { message: "User not found", statusCode: 404, type: "Not found" };
+    if (user.email === input.email.toLowerCase() && user._id !== id) {
+      throw {
+        message: "User with this email already exists",
+        type: "email",
+        statusCode: 409,
+      };
+    } else if (
+      user.username === input.username.toLowerCase() &&
+      user._id !== id
+    ) {
+      throw {
+        message: "User with this username already exists",
+        type: "username",
+        statusCode: 409,
+      };
+    } else if (user.phoneNumber === input.phoneNumber && user._id !== id) {
+      throw {
+        message: "User with this phone number already exists",
+        type: "phoneNumber",
+        statusCode: 409,
+      };
+    } else if (!user) {
+      throw {
+        message: "User not found",
+        statusCode: 404,
+        type: "Bad request",
+      };
+    }
 
-    return user;
+    const updatedUser = await UserModel.findByIdAndUpdate(id, input, {
+      new: true,
+    });
+    if (!updatedUser) {
+      throw {
+        message: "unknown error occurred",
+        statusCode: 404,
+        type: "Bad request",
+      };
+    }
+    return omit(updatedUser.toJSON(), "password");
   } catch (error: any) {
-    throw new Error(error);
+    throw {
+      message: error.message,
+      type: error.type ?? "Server error",
+      statusCode: error.statusCode ?? 500,
+    };
   }
 }
 
-async function getUserByUsername(username: string) {
-  try {
-    const user = await UserModel.findOne({ username });
-    return user;
-  } catch (error: any) {
-    throw new Error(error);
-  }
-}
-
-async function getUserByPhoneNumber(phoneNumber: string) {
-  try {
-    const user = await UserModel.findOne({ phoneNumber });
-    return user;
-  } catch (error: any) {
-    throw new Error(error);
-  }
-}
-
-async function updateUserById(id: string, input: any) {
-  try {
-    const user = await UserModel.findByIdAndUpdate(id, input, { new: true });
-    return user;
-  } catch (error: any) {
-    throw new Error(error);
-  }
-}
-
-async function deleteUserById(id: string) {
+async function remove(id: string) {
   try {
     const user = await UserModel.findByIdAndDelete(id);
     return user;
@@ -83,13 +148,50 @@ async function validatePassword(email: string, password: string) {
   }
 }
 
+async function findExistingUser(input: IUserInput) {
+  try {
+    const { email, username, phoneNumber } = input;
+    const existingUser = await find({
+      $or: [
+        { email: email },
+        { username: username },
+        { phoneNumber: phoneNumber },
+      ],
+    });
+    if (existingUser) {
+      if (existingUser.email === email.toLowerCase()) {
+        throw {
+          message: "User with this email already exists",
+          type: "email",
+          statusCode: 409,
+        };
+      } else if (existingUser.username === username.toLowerCase()) {
+        throw {
+          message: "User with this username already exists",
+          type: "username",
+          statusCode: 409,
+        };
+      } else if (existingUser.phoneNumber === phoneNumber) {
+        throw {
+          message: "User with this phone number already exists",
+          type: "phoneNumber",
+          statusCode: 409,
+        };
+      }
+    }
+    return null;
+  } catch (error: any) {
+    throw {
+      message: error.message,
+      type: error.type ?? "Server error",
+      statusCode: error.statusCode ?? 500,
+    };
+  }
+}
 export default {
-  createUser,
-  getUserById,
-  getUserByEmail,
-  getUserByUsername,
-  getUserByPhoneNumber,
-  updateUserById,
-  deleteUserById,
-  validateUserPassword: validatePassword,
+  create,
+  find,
+  update,
+  remove,
+  validatePassword,
 };
