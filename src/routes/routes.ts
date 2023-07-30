@@ -3,24 +3,11 @@ import {
   AuthController,
   UserController,
   ProductController,
-} from "../controller";
-import { Validate, Authenticate } from "../middleware";
-import { AuthSchema, ProductSchema, UserSchema } from "../schema/";
-import productSchema from "../schema/product.schema";
-
-const PATHS = Object.freeze({
-  USERS: "/api/users",
-  USER_id: "/api/users/:id",
-  USER_Query: "/api/users/:query",
-  AUTH_REGISTER: "/auth/register",
-  AUTH: "/auth/login",
-  Auth_UPDATE: "/auth/update:id",
-  Auth_DELETE: "/auth/delete:id",
-  LOGOUT: "/auth/Logout",
-  SESSIONS: "/api/sessions",
-  PRODUCTS: "/api/products",
-  PRODUCT_id: "/api/products/:id",
-});
+} from "../controllers";
+import { Validate, Authenticate } from "../middlewares";
+import { AuthSchema, ProductSchema, UserSchema } from "../schemas";
+import productSchema from "../schemas/product.schema";
+import ROUTES from "./routes.constants";
 
 export default function routes(app: Express) {
   // ? This is the default route
@@ -30,54 +17,58 @@ export default function routes(app: Express) {
 
   // ? Auth routes
   app.post(
-    PATHS.AUTH_REGISTER,
+    ROUTES.AUTH_REGISTER,
     Validate(UserSchema.createUserSchema),
     AuthController.registerUserHandler
   );
   app.post(
-    PATHS.AUTH,
+    ROUTES.AUTH,
     Validate(AuthSchema.LOGIN),
     AuthController.authenticateUserHandler
   );
-  app.get(PATHS.SESSIONS, Authenticate, AuthController.getUserSessionsHandler);
+  app.get(ROUTES.SESSIONS, Authenticate, AuthController.getUserSessionsHandler);
 
-  app.delete(PATHS.LOGOUT, Authenticate, AuthController.deleteSessionHandler);
+  app.delete(ROUTES.LOGOUT, Authenticate, AuthController.deleteSessionHandler);
   // ? User routes
   app.put(
-    PATHS.Auth_UPDATE,
+    ROUTES.Auth_UPDATE,
     [Validate(UserSchema.updateUser), Authenticate],
     UserController.updateUserHandler
   );
   app.delete(
-    PATHS.Auth_DELETE,
+    ROUTES.Auth_DELETE,
     [Validate(UserSchema.deleteUser), Authenticate],
     UserController.deleteUserHandler
   );
 
-  app.get(PATHS.USERS, Authenticate, UserController.getAllUsersHandler);
-  app.get(PATHS.USER_id, Authenticate, UserController.getUserByIdHandler);
-  app.get(PATHS.USER_Query, Authenticate, UserController.getUserByQueryHandler);
+  app.get(ROUTES.USERS, Authenticate, UserController.getAllUsersHandler);
+  app.get(ROUTES.USER_id, Authenticate, UserController.getUserByIdHandler);
+  app.get(
+    ROUTES.USER_Query,
+    Authenticate,
+    UserController.getUserByQueryHandler
+  );
 
   // ? Product routes
   app.post(
-    PATHS.PRODUCTS,
+    ROUTES.PRODUCTS,
     [Validate(productSchema.createSchema), Authenticate],
     ProductController.create
   );
   app.get(
-    PATHS.PRODUCTS,
+    ROUTES.PRODUCTS,
     Validate(ProductSchema.getSchema),
     ProductController.get
   );
   app.get(
-    PATHS.PRODUCT_id,
+    ROUTES.PRODUCT_id,
     Validate(ProductSchema.getSchema),
     ProductController.find
   );
   app.put(
-    PATHS.PRODUCT_id,
+    ROUTES.PRODUCT_id,
     [Authenticate, Validate(productSchema.updateSchema)],
     ProductController.update
   );
-  app.delete(PATHS.PRODUCT_id, Authenticate, ProductController.remove);
+  app.delete(ROUTES.PRODUCT_id, Authenticate, ProductController.remove);
 }

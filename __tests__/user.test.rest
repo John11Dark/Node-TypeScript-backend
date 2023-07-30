@@ -213,7 +213,7 @@ headers: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YzUzMmQwNTc0MjEyMWJjZDhjMDlhNCIsImVtYWlsIjoiZGFya0Bqb2hubXVsbGVyLmV1IiwidXNlcm5hbWUiOiJqb2huMl8yZGFyayIsInBob25lTnVtYmVyIjoiOTk2NzAyMjAiLCJpbWFnZSI6WyJwcm9wZmlsZS5wbmciXSwiaXNWZXJpZmllZCI6ZmFsc2UsImRvYiI6IjIwMDEtMDMtMTYiLCJnZW5kZXIiOnRydWUsInNlc3Npb25JZCI6IjY0YzUzNDhiMjg1NzgzOTFlZjlkZmFhNiIsImlhdCI6MTY5MDY0NTY0MywiZXhwIjoxNjkwNjQ5MjQzfQ.DJ0x7oiLCbhwkMZDTGhJawl2jxe4gAsMd6zUVe6eSCw
 
 
-###
+### invalid route 
 POST http://10.10.10.151:9000/auth/register
 Content-Type: application/json
 

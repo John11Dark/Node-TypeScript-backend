@@ -1,7 +1,7 @@
 import { get } from "lodash";
 import { Request, Response, NextFunction } from "express";
 import { Token } from "../utilities";
-import { SessionService } from "../service";
+import { SessionService } from "../services";
 
 const deserializeUser = async (
   req: Request,

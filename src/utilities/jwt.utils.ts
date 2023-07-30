@@ -12,7 +12,7 @@ const accessTokenTtl =
 const refreshTokenTtL =
   process.env.refreshTokenTtl || config.get<string>("refreshTokenTtl");
 
-async function generateToken(user: IUser, sessionId: string) {
+async function generateToken(user: IUser | any, sessionId: string) {
   const newUser = {
     id: user._id,
     email: user.email,

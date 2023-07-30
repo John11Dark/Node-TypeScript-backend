@@ -24,13 +24,6 @@ const productSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
-    offer: {
-      type: {
-        type: Number,
-        description: String,
-      },
-    },
-    tags: [String],
   },
 
   { timestamps: true }

@@ -1,4 +1,4 @@
-import { number, object, string, TypeOf } from "zod";
+import { number, object, string, TypeOf, array } from "zod";
 const payload = {
   body: object({
     title: string({
@@ -14,18 +14,11 @@ const payload = {
     price: number({
       required_error: "Price is required",
     }),
-    images: string({
-      required_error: "Images is required",
-    }),
-    offer: object({
-      type: number({
-        required_error: "Type is required",
-      }),
-      description: string({
-        required_error: "Description is required",
-      }).optional(),
-    }),
-    tags: string().optional(),
+    images: array(
+      string({
+        required_error: "Images is required",
+      })
+    ),
   }),
 };
 

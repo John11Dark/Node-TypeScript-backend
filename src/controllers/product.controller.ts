@@ -4,9 +4,9 @@ import {
   DeleteProductSchemaType,
   GetProductSchemaType,
   UpdateProductSchemaType,
-} from "../schema/product.schema";
+} from "../schemas/product.schema";
 
-import { ProductService } from "../service";
+import { ProductService } from "../services";
 
 async function create(
   req: Request<{}, {}, CreateProductSchemaType["body"]>,
@@ -14,15 +14,13 @@ async function create(
 ) {
   try {
     const userId = res.locals.user._id;
-    const { title, description, price, images, offer, tags } = req.body;
+    const { title, description, price, images } = req.body;
     const product = await ProductService.create({
       user: userId,
       title,
       description,
       price,
       images,
-      offer,
-      tags,
     });
     return res.status(201).send({
       message: "Product created successfully",
@@ -58,7 +56,7 @@ async function update(
 ) {
   const userId = res.locals.user._id;
   const { productId } = req.params;
-  const { title, description, price, images, offer, tags } = req.body;
+  const { title, description, price, images } = req.body;
 
   const product = await ProductService.find({ productId });
   if (!product)
@@ -80,8 +78,6 @@ async function update(
         description,
         price,
         images,
-        offer,
-        tags,
       },
       {
         new: true,

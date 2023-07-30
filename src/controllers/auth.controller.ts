@@ -1,8 +1,8 @@
 import { Response, Request } from "express";
 import bcrypt from "bcrypt";
 import { Token } from "../utilities";
-import { UserService, SessionService } from "../service/index";
-import { CreateUserSchemaType } from "../schema/user.schema";
+import { UserService, SessionService } from "../services/index";
+import { CreateUserSchemaType } from "../schemas/user.schema";
 
 async function authenticateUserHandler(
   req: Request<{}, {}, CreateUserSchemaType["body"]>,
