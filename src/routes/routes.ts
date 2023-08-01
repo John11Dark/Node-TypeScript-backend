@@ -4,9 +4,8 @@ import {
   UserController,
   ProductController,
 } from "../controllers";
-import { Validate, Authenticate } from "../middlewares";
+import { Validate, Authenticate, Files } from "../middlewares";
 import { AuthSchema, ProductSchema, UserSchema } from "../schemas";
-import productSchema from "../schemas/product.schema";
 import ROUTES from "./routes.constants";
 
 export default function routes(app: Express) {
@@ -18,7 +17,11 @@ export default function routes(app: Express) {
   // ? Auth routes
   app.post(
     ROUTES.AUTH_REGISTER,
-    Validate(UserSchema.createUserSchema),
+    [
+      Files.handleImageUpload,
+      Validate(UserSchema.createUserSchema),
+      Files.processImages,
+    ],
     AuthController.registerUserHandler
   );
   app.post(
@@ -26,33 +29,54 @@ export default function routes(app: Express) {
     Validate(AuthSchema.LOGIN),
     AuthController.authenticateUserHandler
   );
-  app.get(ROUTES.SESSIONS, Authenticate, AuthController.getUserSessionsHandler);
+  app.get(
+    ROUTES.SESSIONS,
+    Authenticate.authenticateToken,
+    AuthController.getUserSessionsHandler
+  );
 
-  app.delete(ROUTES.LOGOUT, Authenticate, AuthController.deleteSessionHandler);
+  app.delete(
+    ROUTES.LOGOUT,
+    Authenticate.authenticateToken,
+    AuthController.deleteSessionHandler
+  );
   // ? User routes
   app.put(
     ROUTES.Auth_UPDATE,
-    [Validate(UserSchema.updateUser), Authenticate],
+    [Validate(UserSchema.updateUser), Authenticate.authenticateToken],
     UserController.updateUserHandler
   );
   app.delete(
     ROUTES.Auth_DELETE,
-    [Validate(UserSchema.deleteUser), Authenticate],
+    [Validate(AuthSchema.deleteUser), Authenticate.authenticateToken],
     UserController.deleteUserHandler
   );
 
-  app.get(ROUTES.USERS, Authenticate, UserController.getAllUsersHandler);
-  app.get(ROUTES.USER_id, Authenticate, UserController.getUserByIdHandler);
+  app.get(
+    ROUTES.USERS,
+    Authenticate.authenticateToken,
+    UserController.getAllUsersHandler
+  );
+  app.get(
+    ROUTES.USER_id,
+    Authenticate.authenticateToken,
+    UserController.getUserByIdHandler
+  );
   app.get(
     ROUTES.USER_Query,
-    Authenticate,
+    Authenticate.authenticateToken,
     UserController.getUserByQueryHandler
   );
 
   // ? Product routes
   app.post(
     ROUTES.PRODUCTS,
-    [Validate(productSchema.createSchema), Authenticate],
+    [
+      Validate(ProductSchema.createSchema),
+      Authenticate.authenticateToken,
+      Files.handleImageUpload,
+      Files.processImages,
+    ],
     ProductController.create
   );
   app.get(
@@ -67,8 +91,12 @@ export default function routes(app: Express) {
   );
   app.put(
     ROUTES.PRODUCT_id,
-    [Authenticate, Validate(productSchema.updateSchema)],
+    [Authenticate.authenticateToken, Validate(ProductSchema.updateSchema)],
     ProductController.update
   );
-  app.delete(ROUTES.PRODUCT_id, Authenticate, ProductController.remove);
+  app.delete(
+    ROUTES.PRODUCT_id,
+    Authenticate.authenticateToken,
+    ProductController.remove
+  );
 }

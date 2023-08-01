@@ -51,8 +51,16 @@ const resetPassword = object({
   }),
 });
 
+const deleteUser = object({
+  body: object({
+    password: string().min(8, "Password must be at least 8 characters"),
+    token: string(),
+  }),
+});
+
 export default {
   LOGIN: login,
   forgotPassword,
   resetPassword,
+  deleteUser,
 };

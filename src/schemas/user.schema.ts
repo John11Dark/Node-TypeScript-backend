@@ -1,4 +1,5 @@
 import { TypeOf, boolean, date, object, string } from "zod";
+
 const createUserSchema = object({
   body: object({
     name: string({
@@ -41,9 +42,6 @@ const createUserSchema = object({
     dateOfBirth: string({
       required_error: "Date of birth is required",
     }),
-    image: string({
-      required_error: "Image is required",
-    }),
   }).refine((data: any) => data.password === data.passwordConfirmation, {
     message: "Passwords do not match",
     path: ["passwordConfirmation"],
@@ -55,13 +53,6 @@ export type CreateUserSchemaType = Omit<
   "body.passwordConfirmation"
 >;
 
-const deleteUser = object({
-  body: object({
-    password: string().min(8, "Password must be at least 8 characters"),
-    token: string(),
-  }),
-});
-
 const updateUser = object({});
 
-export default { createUserSchema, deleteUser, updateUser };
+export default { createUserSchema, updateUser };

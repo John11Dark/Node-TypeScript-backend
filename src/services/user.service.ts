@@ -5,37 +5,17 @@ import { omit } from "lodash";
 
 async function create(input: IUserInput) {
   try {
-    const { email, username, phoneNumber } = input;
-    const existingUser = await find({
-      $or: [
-        { email: email },
-        { username: username },
-        { phoneNumber: phoneNumber },
-      ],
-    });
-    if (existingUser) {
-      if (existingUser.email === email.toLowerCase()) {
+    const existingUser = findExistingUser(input);
+    if (!existingUser) {
+      const user = await UserModel.create(input);
+      if (!user)
         throw {
-          message: "User with this email already exists",
-          type: "email",
-          statusCode: 409,
+          message: "unknown error occurred",
+          statusCode: 401,
+          type: "Bad request",
         };
-      } else if (existingUser.username === username.toLowerCase()) {
-        throw {
-          message: "User with this username already exists",
-          type: "username",
-          statusCode: 409,
-        };
-      } else if (existingUser.phoneNumber === phoneNumber) {
-        throw {
-          message: "User with this phone number already exists",
-          type: "phoneNumber",
-          statusCode: 409,
-        };
-      }
+      return omit(user.toJSON(), "password");
     }
-    const user = await UserModel.create(input);
-    return omit(user.toJSON(), "password");
   } catch (error: any) {
     throw {
       message: error.message,
@@ -148,7 +128,7 @@ async function validatePassword(email: string, password: string) {
   }
 }
 
-async function findExistingUser(input: IUserInput) {
+async function findExistingUser(input: IUserInput, id?: string): Promise<any> {
   try {
     const { email, username, phoneNumber } = input;
     const existingUser = await find({
@@ -179,6 +159,12 @@ async function findExistingUser(input: IUserInput) {
         };
       }
     }
+
+    if (id) {
+      if (existingUser._id === id) {
+        return existingUser;
+      }
+    }
     return null;
   } catch (error: any) {
     throw {
@@ -188,6 +174,7 @@ async function findExistingUser(input: IUserInput) {
     };
   }
 }
+
 export default {
   create,
   find,

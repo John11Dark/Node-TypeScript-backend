@@ -2,7 +2,8 @@ import Jwt from "jsonwebtoken";
 import config from "config";
 import { IUser } from "../interfaces/user.interface";
 
-const PRIVATE_KEY = process.env.JWT_SECRET || config.get<string>("JWT_SECRET");
+const PRIVATE_KEY =
+  process.env.JWT_PRIVATE_KEY_ENV || config.get<string>("JWT_PRIVATE_KEY");
 const REFRESH_KEY =
   process.env.JWT_REFRESH_SECRET || config.get<string>("JWT_REFRESH_SECRET");
 const PUBLIC_KEY =

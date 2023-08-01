@@ -27,7 +27,7 @@ async function create(
       data: product,
     });
   } catch (error: any) {
-    res.status(400).json({
+    res.status(401).json({
       message: error.message,
     });
   }

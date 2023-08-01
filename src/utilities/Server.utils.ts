@@ -1,6 +1,6 @@
 import express from "express";
 import routes from "../routes/routes";
-import deserializeUser from "../middlewares/deserializeUser";
+import { Authenticate } from "../middlewares";
 import compression from "compression";
 import cors from "cors"; // TODO: Add cors Middleware
 import helmet from "helmet";
@@ -12,7 +12,7 @@ function init() {
   app.use(express.static("public"));
   app.use(helmet());
   app.use(compression());
-  app.use(deserializeUser);
+  app.use(Authenticate.deserializeUser);
 
   routes(app);
 

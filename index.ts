@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import config from "config";
 // ? * -->
 import { Server, connect, logger } from "./src/utilities";

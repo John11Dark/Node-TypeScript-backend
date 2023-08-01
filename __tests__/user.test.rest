@@ -154,6 +154,7 @@ Content-Type: application/json
 # nothing is going to happen but the extra field will be eleminated
 POST http://10.10.10.151:9000/auth/register
 Content-Type: application/json
+Multipart: true
 
 {
     "names" : "test",
@@ -161,10 +162,10 @@ Content-Type: application/json
     "name":  "user",
     "name": "Dark Engines",
     "password": "123456789",
-    "username" : "John1_1Dark",
-    "email" : "mail@johnmuller.eu",
+    "username" : "John1_1Darskas",
+    "email" : "mail@johnmuller.eussss",
     "countryCode" : "+356",
-    "phoneNumber" : "79230011",
+    "phoneNumber" : "79830019",
     "address" : {
         "street" : "test",
         "city" : "test",
@@ -174,21 +175,21 @@ Content-Type: application/json
     "role" : "admin",
     "passwordConfirmation": "123456789",
     "gender" : true,
-    "dateOfBirth" : "2001-03-16",
-    "image" : "propfile.png"
+    "dateOfBirth" : "2001-03-16"
 }
 
 ### Rigster correct user
 POST http://10.10.10.151:9000/auth/register
 Content-Type: application/json
+MultiPart: true
 
 {
     "name": "Dark Engines",
     "password": "123456789",
-    "username" : "John1_1Darkas",
-    "email" : "mail@johnmuller.eua",
+    "username" : "John1_1Darkass",
+    "email" : "mail@johnmuller.euas",
     "countryCode" : "+356",
-    "phoneNumber" : "79230021",
+    "phoneNumber" : "79237001",
     "address" : {
         "street" : "test",
         "city" : "test",
@@ -198,8 +199,7 @@ Content-Type: application/json
     "role" : "admin",
     "passwordConfirmation": "123456789",
     "gender" : true,
-    "dateOfBirth" : "2001-03-16",
-    "image" : "propfile.png"
+    "dateOfBirth" : "2001-03-16"
 }
 
 ###

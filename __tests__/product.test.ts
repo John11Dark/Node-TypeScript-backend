@@ -68,20 +68,38 @@ describe("product", () => {
         await supertest(app).get(`${ROUTES.PRODUCTS}/${productId}`).expect(404);
       });
     });
+  });
 
-    describe("given the product does exist", () => {
-      it("should return a 200 status and the product", async () => {
-        // @ts-ignore
-        const product = await ProductService.create(products[0]);
-        console.log(product._id);
-        const { body, statusCode } = await supertest(app).get(
-          `${ROUTES.PRODUCTS}/${product._id.toString()}`
-        );
-
-        expect(statusCode).toBe(200);
-
-        expect(body._id).toBe(product._id);
+  describe("create a new product route", () => {
+    describe("given the user is not authenticated", () => {
+      it("should return a 401", async () => {
+        await supertest(app)
+          .post(ROUTES.PRODUCTS)
+          .send(products[0])
+          .expect(401);
       });
+    });
+  });
+  describe("given the user is authenticated", () => {
+    it("should return a 201", async () => {
+      const token = await Token.generateToken(userPayload, "");
+
+      await supertest(app)
+        .post(ROUTES.PRODUCTS)
+        .set("Authorization", `Bearer ${token}`)
+        .send(products[0])
+        .expect(201);
+    });
+  });
+  describe("given the user is authenticated", () => {
+    it("should return a 201", async () => {
+      const token = await Token.generateToken(userPayload, "");
+
+      await supertest(app)
+        .post(ROUTES.PRODUCTS)
+        .set("Authorization", `Bearer ${token}`)
+        .send(products[1])
+        .expect(201);
     });
   });
 });

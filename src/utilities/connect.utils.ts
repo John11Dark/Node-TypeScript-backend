@@ -3,7 +3,7 @@ import config from "config";
 // ? * -->
 import logger from "./logger.utils";
 export default async function connect() {
-  const db = config.get<string>("dbURL");
+  const db = (process.env.DB_URL_ENV as string) || config.get<string>("DB_URL");
   const dbConfig = {
     useNewUrlParser: true,
     autoIndex: true,
